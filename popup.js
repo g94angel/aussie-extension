@@ -1,24 +1,25 @@
-// Initialize button with user's preferred color
-let changeColor = document.getElementById("changeColor");
+let changeDogNext = document.querySelector('#nextDog');
+let changeDogPrev = document.querySelector('#previousDog');
 
-chrome.storage.sync.get("color", ({ color }) => {
-  changeColor.style.backgroundColor = color;
-});
+// chrome.storage.sync.get("color", ({ color }) => {
+//   changeColor.style.background = 'red';
+// });
 
-// When the button is clicked, inject setPageBackgroundColor into current page
-changeColor.addEventListener("click", async () => {
-  let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+let grabImg = document.querySelector('img');
+let dogArr = ['https://cf.ltkcdn.net/dogs/images/std/279404-800x533-australian-shepherd.webp', 'https://thehappypuppysite.com/wp-content/uploads/2019/01/Rottweiler-Temperament-long.jpg'];
+let curDogIndex = 0;
 
-  chrome.scripting.executeScript({
-    target: { tabId: tab.id },
-    function: setPageBackgroundColor,
-  });
-});
+changeDogNext.addEventListener("click", nextDog);
+changeDogPrev.addEventListener("click", prevDog);
 
-// The body of this function will be executed as a content script inside the
-// current page
-function setPageBackgroundColor() {
-  chrome.storage.sync.get("color", ({ color }) => {
-    document.body.style.backgroundColor = color;
-  });
+function nextDog() {
+  curDogIndex++;
+  grabImg.src = dogArr[curDogIndex];
+
+}
+
+function prevDog() {
+  curDogIndex--;
+  grabImg.src = dogArr[curDogIndex];
+
 }
